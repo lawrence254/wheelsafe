@@ -1,11 +1,15 @@
 package com.wheel.safe.wheelsafe.security.jwt;
 
 
+import com.wheel.safe.wheelsafe.JwtProperties;
 import com.wheel.safe.wheelsafe.user.entity.User;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -18,15 +22,16 @@ import java.util.function.Function;
 
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider {
-    @Value("${app.jwt.secret}")
-    private String jwtSecret;
+    private final JwtProperties jwtProperties;
+    private SecretKey signingKey;
 
-    @Value("${app.jwt.expiration.access}")
-    private long jwtAccessExpirationMs;
-
-    @Value("${app.jwt.expiration.refresh}")
-    private long jwtRefreshExpirationMs;
+    @PostConstruct
+    public void init() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
+        this.signingKey = Keys.hmacShaKeyFor(keyBytes);
+    }
 
     public String generateAccessToken(UserDetails userDetails){
         User user= (User) userDetails;
@@ -38,7 +43,7 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtAccessExpirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationAccess()))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -47,7 +52,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtRefreshExpirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationRefresh()))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
 
@@ -79,12 +84,16 @@ public class JwtTokenProvider {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token){
+    public Date extractExpiration(String token){
         return extractClaim(token, Claims::getExpiration);
     }
 
     public SecretKey getSigningKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public long getAccessTokenExpirationTime(){
+        return jwtProperties.getExpirationAccess()  ;
     }
 }
