@@ -1,5 +1,10 @@
 package com.wheel.safe.wheelsafe.security.service;
 
+/**
+ * @Author: Lawrence Karanja
+ * @Date: 2023-10-01
+ * @Description: Service for authentication and authorization
+ */
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,7 +49,7 @@ public class AuthenticationService {
             .firstName(request.getFirstName())
             .lastName(request.getLastName())
             .email(request.getEmail())
-            .password(request.getPassword())
+            .password(passwordEncoder.encode(request.getPassword()))
             .phoneNumber(request.getPhoneNumber())
             .role(request.getRole())
             .enabled(true)
