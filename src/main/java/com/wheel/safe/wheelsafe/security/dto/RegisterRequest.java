@@ -1,5 +1,9 @@
 package com.wheel.safe.wheelsafe.security.dto;
-
+/**
+ * @Author: Lawrence Karanja
+ * @Date: 2023-10-01
+ * @Description: DTO for user registration request
+ */
 import com.wheel.safe.wheelsafe.user.entity.UserRole;
 
 import jakarta.validation.constraints.Email;

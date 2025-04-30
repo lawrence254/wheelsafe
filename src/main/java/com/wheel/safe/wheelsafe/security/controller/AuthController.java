@@ -1,5 +1,9 @@
 package com.wheel.safe.wheelsafe.security.controller;
-
+/**
+ * @Author: Lawrence Karanja
+ * @Date: 2023-10-01
+ * @Description: Controller for authentication and authorization endpoints
+ */
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
