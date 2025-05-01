@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "app.jwt")
 public class JwtProperties {
     private String secret;
-    private long expirationAccess;
-    private long expirationRefresh;
+    private boolean secretIsBase64=true;
+    private long access;
+    private long refresh;
 }

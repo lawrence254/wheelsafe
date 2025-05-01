@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,12 +31,11 @@ public class JwtTokenProvider {
 
     @PostConstruct
     public void init() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
-        this.signingKey = Keys.hmacShaKeyFor(keyBytes);
+        this.signingKey = getSigningKey();
     }
 
-    public String generateAccessToken(UserDetails userDetails){
-        User user= (User) userDetails;
+    public String generateAccessToken(UserDetails userDetails) {
+        User user = (User) userDetails;
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
         claims.put("role", user.getRole());
@@ -43,57 +44,80 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationAccess()))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccess()))
+                .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateRefreshToken(UserDetails userDetails){
+    public String generateRefreshToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getExpirationRefresh()))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefresh()))
+                .signWith(signingKey, SignatureAlgorithm.HS256)
                 .compact();
-
     }
 
-    public String extractUsername(String token){
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public<T> T extractClaim(String token, Function<Claims, T>claimsResolver){
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
+                .setSigningKey(signingKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails){
+    public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token){
+    private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public Date extractExpiration(String token){
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    public SecretKey getSigningKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
-        return Keys.hmacShaKeyFor(keyBytes);
+    public long getAccessTokenExpirationTime() {
+        return jwtProperties.getAccess();
+    }
+    
+    private SecretKey getSigningKey() {
+        if (jwtProperties.isSecretIsBase64()) {
+            // Base64 decode the secret before creating the key
+            byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecret());
+            return Keys.hmacShaKeyFor(keyBytes);
+        } else {
+            // Use the secret directly as UTF-8 bytes
+            return Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
+        }
     }
 
-    public long getAccessTokenExpirationTime(){
-        return jwtProperties.getExpirationAccess()  ;
+    // Helper method for jwt.io testing - gets the raw secret string for jwt.io
+    public String getSecretForJwtIo() {
+        if (jwtProperties.isSecretIsBase64()) {
+            // For jwt.io, you'd either:
+            // 1. Use the original Base64 string WITH the "secret base64 encoded" option
+            // checked
+            return jwtProperties.getSecret() + " (use with 'secret base64 encoded' checkbox)";
+
+            // OR
+            // 2. Return the decoded string without checking the checkbox
+            // return new String(Decoders.BASE64.decode(jwtProperties.getSecret()),
+            // StandardCharsets.UTF_8);
+        } else {
+            // If not base64 encoded, just return the raw secret
+            return jwtProperties.getSecret();
+        }
     }
 }

@@ -17,7 +17,7 @@ import java.nio.file.Path;
 
 @Service
 @RequiredArgsConstructor
-public class QRCodeService {
+public class BicycleQRCodeService {
     private static final int DEFAULT_QR_CODE_WIDTH = 300;
     private static final int DEFAULT_QR_CODE_HEIGHT = 300;
     public byte[] generateQrCode(
