@@ -44,7 +44,7 @@ public class BikeSale {
     @JoinColumn(name = "shop_id", nullable = false)
     private BikeShop bikeShop;
     private Long saleId;
-    private String salePrice;
+    private Double salePrice;
     private LocalDateTime saleDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "sale_status")
