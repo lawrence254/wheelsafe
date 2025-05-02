@@ -17,6 +17,7 @@ import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.bicycle.service.BicycleQRCodeService;
 import com.wheel.safe.wheelsafe.bicycle.service.BicycleService;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/api/bicycle")
 @RequiredArgsConstructor
+@Schema(description = "Controller for managing bicycles")
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Bicycle", description = "Operations related to bicycles")
 public class BicycleController {
     private final BicycleService bicycleService;
     private final BicycleQRCodeService bicycleQRCodeService;
@@ -50,6 +53,10 @@ public class BicycleController {
      * @return ResponseEntity containing the created bicycle response
      */
     @PostMapping
+    @io.swagger.v3.oas.annotations.Operation(summary = "Create a new bicycle", description = "Creates a new bicycle and generates a QR code for it.")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Bicycle created successfully")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Internal server error")
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid input data")
     public ResponseEntity<BicycleResponse> createBicycle(@Valid @RequestBody BicycleRequest request) {
         try {
             Bicycle bicycle = BicycleMapper.toEntity(request);
