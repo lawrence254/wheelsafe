@@ -14,6 +14,7 @@ import com.wheel.safe.wheelsafe.bicycle.dto.BicycleDTO;
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleRequest;
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleResponse;
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
+import com.wheel.safe.wheelsafe.bicycle.entity.BicycleType;
 import com.wheel.safe.wheelsafe.bicycle.service.BicycleQRCodeService;
 import com.wheel.safe.wheelsafe.bicycle.service.BicycleService;
 
@@ -192,7 +193,7 @@ public class BicycleController {
             existingBicycle.setBrand(request.getBrand());
             existingBicycle.setSerialNumber(request.getSerialNumber());
             existingBicycle.setColor(request.getColor());
-            existingBicycle.setType(request.getType());
+            existingBicycle.setType(BicycleType.valueOf(request.getType())); // Convert string to enum
             existingBicycle.setSize(request.getSize());
             existingBicycle.setFrameMaterial(request.getFrameMaterial());
             existingBicycle.setGearSystem(request.getGearSystem());

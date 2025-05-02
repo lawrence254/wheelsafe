@@ -1,6 +1,7 @@
 package com.wheel.safe.wheelsafe.bicycle.dto;
 
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
+import com.wheel.safe.wheelsafe.bicycle.entity.BicycleType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +32,7 @@ public class BicycleRequest {
         bicycle.setBrand(this.brand);
         bicycle.setSerialNumber(this.serialNumber);
         bicycle.setColor(this.color);
-        bicycle.setType(this.type);
+        bicycle.setType(BicycleType.valueOf(this.type));
         bicycle.setSize(this.size);
         bicycle.setFrameMaterial(this.frameMaterial);
         bicycle.setGearSystem(this.gearSystem);
