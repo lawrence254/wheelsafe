@@ -2,11 +2,17 @@ package com.wheel.safe.wheelsafe.bicycle.entity;
 
 import java.time.LocalDateTime;
 
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -56,20 +62,21 @@ public class Bicycle {
     private String model;
     private String brand;
     private String serialNumber;
-    @Transient
-    private Long shopId; // ID of the shop where the bicycle is registered. Move to Shop entity
-    @Transient
-    private Long ownerId; // ID of the current owner (user). Move to shop entity
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "shop_id", referencedColumnName = "id")
+    private BikeShop shopId;
     @Transient
     private String status; // Status of the bicycle (e.g., available, sold, in repair). Move to Shop entity
     private String color;
-    private String type; // Type of bicycle (e.g., mountain, road, hybrid). 
-    private String size; // Size of the bicycle (e.g., small, medium, large). 
-    private String frameMaterial; // Material of the bicycle frame (e.g., aluminum, carbon, steel).
-    private String gearSystem; // Type of gear system (e.g., manual, automatic). 
-    private String brakeType; // Type of brakes (e.g., disc, rim). 
-    private String tireSize; // Size of the tires (e.g., 26", 29").
-    private String accessories; // List of accessories (e.g., lights, bell, lock).
+    @Enumerated(EnumType.STRING)
+    @Column(name = "bicycle_type")
+    private BicycleType type;
+    private String size;
+    private String frameMaterial;
+    private String gearSystem;
+    private String brakeType;
+    private String tireSize;
+    private String accessories;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
