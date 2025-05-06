@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.wheel.safe.wheelsafe.bikeshop.dto.BikeShopRequest;
+import com.wheel.safe.wheelsafe.bikeshop.dto.BikeShopResponse;
 import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 import com.wheel.safe.wheelsafe.bikeshop.exceptions.BikeShopAlreadyExistsException;
 import com.wheel.safe.wheelsafe.bikeshop.exceptions.BikeShopNotFoundException;
@@ -17,51 +19,65 @@ public class BikeShopService {
     private final BikeShopRepository bikeShopRepository;
     
     
-    public void addBikeShop(BikeShop bikeShop) {
-        if (bikeShopRepository.existsById(bikeShop.getId())) {
-            throw new BikeShopAlreadyExistsException("BikeShop with id " + bikeShop.getId() + " already exists");
+    public BikeShopResponse addBikeShop(BikeShopRequest bikeShopRequest) {
+        if (bikeShopRepository.existsById(bikeShopRequest.getId())) {
+            throw new BikeShopAlreadyExistsException("BikeShop with id " + bikeShopRequest.getId() + " already exists");
         }
-        bikeShopRepository.save(bikeShop);
+        BikeShop bikeShop = bikeShopRequest.toEntity();
+        BikeShop savedBikeShop = bikeShopRepository.save(bikeShop);
+        return BikeShopResponse.fromEntity(savedBikeShop);
     }
 
-    public void updateBikeShop(BikeShop bikeShop) {
-        bikeShopRepository.save(bikeShop);
+    public BikeShopResponse updateBikeShop(BikeShopRequest bikeShopRequest) {
+        BikeShop existingBikeShop = bikeShopRepository.findById(bikeShopRequest.getId())
+                .orElseThrow(() -> new BikeShopNotFoundException("BikeShop with id " + bikeShopRequest.getId() + " not found"));
+        existingBikeShop= bikeShopRequest.toEntity();
+        BikeShop updatedBikeShop = bikeShopRepository.save(existingBikeShop);
+        return BikeShopResponse.fromEntity(updatedBikeShop);
     }
 
     public void deleteBikeShop(Long id) {
         bikeShopRepository.deleteById(id);
     }
 
-    public BikeShop getBikeShop(Long id) {
-        return bikeShopRepository.findById(id)
-                .orElseThrow(() -> new BikeShopNotFoundException("BikeShop with id " + id + " not found"));
+    public BikeShopResponse getBikeShop(Long id) {
+        return BikeShopResponse.fromEntity(bikeShopRepository.findById(id)
+                .orElseThrow(() -> new BikeShopNotFoundException("BikeShop with id " + id + " not found")));
     }
 
-    public List<BikeShop> getAllBikeShops() {
-        return bikeShopRepository.findAll();
+    public List<BikeShopResponse> getAllBikeShops() {
+        return bikeShopRepository.findAll().stream()
+                .map(BikeShopResponse::fromEntity)
+                .toList();
     }
 
-    public List<BikeShop> getBikeShopsByName(String name) {
+    public List<BikeShopResponse> getBikeShopsByName(String name) {
         List<BikeShop> bikeShops = bikeShopRepository.findByName(name);
         if (bikeShops.isEmpty()) {
             throw new BikeShopNotFoundException("No BikeShops found with name: " + name);
         }
-        return bikeShops;
+        return bikeShops.stream()
+                .map(BikeShopResponse::fromEntity)
+                .toList();
     }
 
-    public List<BikeShop> getBikeShopsByLocation(String location) {
+    public List<BikeShopResponse> getBikeShopsByLocation(String location) {
         List<BikeShop> bikeShops = bikeShopRepository.findByLocation(location);
         if (bikeShops.isEmpty()) {
             throw new BikeShopNotFoundException("No BikeShops found at location: " + location);
         }
-        return bikeShops;
+        return bikeShops.stream()
+                .map(BikeShopResponse::fromEntity)
+                .toList();
     }
 
-    public List<BikeShop> getBikeShopsByService(String service) {
+    public List<BikeShopResponse> getBikeShopsByService(String service) {
         List<BikeShop> bikeShops = bikeShopRepository.findByServicesContaining(service);
         if (bikeShops.isEmpty()) {
             throw new BikeShopNotFoundException("No BikeShops found offering service: " + service);
         }
-        return bikeShops;
+        return bikeShops.stream()
+                .map(BikeShopResponse::fromEntity)
+                .toList();
     }
 }
