@@ -90,7 +90,7 @@ public class BicycleController {
         List<Bicycle> bicycles = bicycleService.getAllBicycles();
         List<BicycleResponse> responses = bicycles.stream()
                 .map(BicycleMapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
 
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }

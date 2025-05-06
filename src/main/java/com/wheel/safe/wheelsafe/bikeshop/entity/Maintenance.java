@@ -1,7 +1,6 @@
 package com.wheel.safe.wheelsafe.bikeshop.entity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 
