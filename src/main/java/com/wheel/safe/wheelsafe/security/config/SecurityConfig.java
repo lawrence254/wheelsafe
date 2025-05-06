@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/law-enforcement/**").hasRole("LAW_ENFORCEMENT")
                         .requestMatchers("/api/insurance/**").hasRole("INSURANCE")
-                        .requestMatchers("/api/bike-shop/**").hasRole("BIKE_SHOP")
+                        .requestMatchers("/api/bikeshop/**").hasRole("BIKE_SHOP")
                         .requestMatchers("/api/bicycle/**").hasAnyRole("ADMIN", "BIKE_SHOP")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

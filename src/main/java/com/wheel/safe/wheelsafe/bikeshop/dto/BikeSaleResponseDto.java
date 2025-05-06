@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleMapper;
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleResponse;
-import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.bikeshop.entity.BikeSale;
 import com.wheel.safe.wheelsafe.bikeshop.entity.SaleStatus;
 import com.wheel.safe.wheelsafe.user.dto.UserProfileDTO;
