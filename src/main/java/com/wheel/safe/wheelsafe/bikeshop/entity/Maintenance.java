@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "maintenance", uniqueConstraints = @UniqueConstraint(columnNames = {"bike_id", "maintenance_id"}))
+@Table(name = "maintenance_records", uniqueConstraints = @UniqueConstraint(columnNames = {"bike_id", "maintenance_id"}))
 public class Maintenance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +36,6 @@ public class Maintenance {
     @ManyToOne
     @JoinColumn(name = "bike_id", nullable = false)
     private Bicycle bicycle;
-    private UUID maintenanceId;
     @Enumerated(EnumType.STRING)
     @Column(name = "maintenance_status")
     private MaintenanceStatus maintenanceStatus;
@@ -46,7 +45,7 @@ public class Maintenance {
     private LocalDateTime maintenanceDate;
     private String maintenanceDescription;
     private String maintenanceImageUrl;
-    private String maintenanceCost;
+    private Double maintenanceCost;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
