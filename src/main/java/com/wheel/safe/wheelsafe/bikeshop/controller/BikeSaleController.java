@@ -97,15 +97,7 @@ public class BikeSaleController {
         List<BikeSaleResponseDto> bikeSales = bikeSaleService.getSalesByBikeShopId(bikeShopId);
         return ResponseEntity.ok(bikeSales);
     }
-    @GetMapping("/customer/{customerId}")
-    @Operation(summary = "Get Bike Sales by Customer ID", description = "Get all Bike Sales for a specific Customer")
-    @ApiResponse(responseCode = "200", description = "Bike Sales retrieved successfully")
-    @ApiResponse(responseCode = "404", description = "No Bike Sales found for the specified Customer")
-    @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<BikeSaleResponseDto>> getBikeSalesByCustomerId(@PathVariable Long customerId) {
-        List<BikeSaleResponseDto> bikeSales = bikeSaleService.getSalesByCustomerId(customerId);
-        return ResponseEntity.ok(bikeSales);
-    }
+ 
     @GetMapping("/status/{status}")
     @Operation(summary = "Get Bike Sales by Status", description = "Get all Bike Sales for a specific Status")
     @ApiResponse(responseCode = "200", description = "Bike Sales retrieved successfully")
@@ -116,15 +108,6 @@ public class BikeSaleController {
         return ResponseEntity.ok(bikeSales);
     }
 
-    @GetMapping("/model/{bikeModel}")
-    @Operation(summary = "Get Bike Sales by Bike Model", description = "Get all Bike Sales for a specific Bike Model")
-    @ApiResponse(responseCode = "200", description = "Bike Sales retrieved successfully")
-    @ApiResponse(responseCode = "404", description = "No Bike Sales found for the specified Bike Model")
-    @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<BikeSaleResponseDto>> getBikeSalesByBikeModel(@PathVariable String bikeModel) {
-        List<BikeSaleResponseDto> bikeSales = bikeSaleService.getSalesByBikeModel(bikeModel);
-        return ResponseEntity.ok(bikeSales);
-    }
     @GetMapping("/date/{startDate}-{endDate}")
     @Operation(summary = "Get Bike Sales by Sale Date", description = "Get all Bike Sales for a specific Sale Date")
     @ApiResponse(responseCode = "200", description = "Bike Sales retrieved successfully")

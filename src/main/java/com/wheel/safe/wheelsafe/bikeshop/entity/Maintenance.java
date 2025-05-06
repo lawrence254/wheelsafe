@@ -3,6 +3,7 @@ package com.wheel.safe.wheelsafe.bikeshop.entity;
 import java.time.LocalDateTime;
 
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
+import com.wheel.safe.wheelsafe.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,6 +39,9 @@ public class Maintenance {
     @ManyToOne
     @JoinColumn(name = "shop_id", nullable = false)
     private BikeShop bikeShop;
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private User customer;
     @Enumerated(EnumType.STRING)
     @Column(name = "maintenance_status")
     private MaintenanceStatus maintenanceStatus;

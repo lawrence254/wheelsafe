@@ -93,8 +93,8 @@ public class ShopMaintenanceController {
     @ApiResponse(responseCode = "200", description = "List of maintenance records retrieved successfully")
     @ApiResponse(responseCode = "404", description = "No maintenance records found for the specified customer")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<MaintenanceResponseDto>> getMaintenancesByBicycleId(@RequestParam Long bicycleId) {
-        List<MaintenanceResponseDto> maintenances = bikeMaintenanceService.getMaintenancesByCustomerId(bicycleId);
+    public ResponseEntity<List<MaintenanceResponseDto>> getMaintenancesByBicycleId(@RequestParam Long customerId) {
+        List<MaintenanceResponseDto> maintenances = bikeMaintenanceService.getMaintenancesByCustomerId(customerId);
         return ResponseEntity.ok(maintenances);
     }
 
@@ -125,15 +125,6 @@ public class ShopMaintenanceController {
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<List<MaintenanceResponseDto>> getMaintenancesByStatus(@RequestParam String status) {
         List<MaintenanceResponseDto> maintenances = bikeMaintenanceService.getMaintenancesByStatus(status);
-        return ResponseEntity.ok(maintenances);
-    }
-    @GetMapping("/bicycle")
-    @Operation(summary = "Get bike maintenance records by bicycle Model", description = "Retrieves bike maintenance records for a specific bicycle model.")
-    @ApiResponse(responseCode = "200", description = "List of maintenance records retrieved successfully")
-    @ApiResponse(responseCode = "404", description = "No maintenance records found for the specified bicycle model")
-    @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<MaintenanceResponseDto>> getMaintenancesByBicycleModel(@RequestParam String bicycleModel) {
-        List<MaintenanceResponseDto> maintenances = bikeMaintenanceService.getMaintenancesByBikeModel(bicycleModel);
         return ResponseEntity.ok(maintenances);
     }
     

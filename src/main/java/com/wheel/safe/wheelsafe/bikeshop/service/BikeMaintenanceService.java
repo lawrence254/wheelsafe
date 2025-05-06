@@ -12,6 +12,7 @@ import com.wheel.safe.wheelsafe.bikeshop.dto.MaintenanceResponseDto;
 import com.wheel.safe.wheelsafe.bikeshop.dto.MaintenanceUpdateRequestDto;
 import com.wheel.safe.wheelsafe.bikeshop.entity.Maintenance;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceStatus;
+import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceType;
 import com.wheel.safe.wheelsafe.bikeshop.exceptions.BicycleNotFoundException;
 import com.wheel.safe.wheelsafe.bikeshop.exceptions.MaintenanceNotFoundException;
 import com.wheel.safe.wheelsafe.bikeshop.repository.MaintenanceRepository;
@@ -68,12 +69,7 @@ public class BikeMaintenanceService {
                 .toList();
     }
     public List<MaintenanceResponseDto> getMaintenancesByStatus(String status) {
-        return maintenanceRepository.findByStatus(MaintenanceStatus.valueOf(status)).stream()
-                .map(MaintenanceResponseDto::fromEntity)
-                .toList();
-    }
-    public List<MaintenanceResponseDto> getMaintenancesByBikeModel(String bikeModel) {
-        return maintenanceRepository.findByBikeModel(bikeModel).stream()
+        return maintenanceRepository.findByMaintenanceStatus(MaintenanceStatus.valueOf(status)).stream()
                 .map(MaintenanceResponseDto::fromEntity)
                 .toList();
     }
@@ -83,12 +79,12 @@ public class BikeMaintenanceService {
                 .toList();
     }
     public List<MaintenanceResponseDto> getMaintenancesByCostBetween(Double minCost, Double maxCost) {
-        return maintenanceRepository.findByCostBetween(minCost, maxCost).stream()
+        return maintenanceRepository.findByMaintenanceCostBetween(minCost, maxCost).stream()
                 .map(MaintenanceResponseDto::fromEntity)
                 .toList();
     }
     public List<MaintenanceResponseDto> getMaintenancesByServiceType(String serviceType) {
-        return maintenanceRepository.findByServiceType(serviceType).stream()
+        return maintenanceRepository.findByMaintenanceType(MaintenanceType.valueOf(serviceType)).stream()
                 .map(MaintenanceResponseDto::fromEntity)
                 .toList();
     }

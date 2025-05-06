@@ -8,6 +8,7 @@ import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 import com.wheel.safe.wheelsafe.bikeshop.entity.Maintenance;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceStatus;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceType;
+import com.wheel.safe.wheelsafe.user.entity.User;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -25,7 +26,7 @@ public class MaintenanceCreateRequestDto {
     private Long bikeId;
 
     @NotNull(message = "Customer ID is required")
-    private Long customerId;
+    private Long customer;
 
     @NotNull(message = "Bike shop ID is required")
     private Long bikeShopId;
@@ -53,6 +54,7 @@ public class MaintenanceCreateRequestDto {
         return Maintenance.builder()
                 .bicycle(Bicycle.builder().id(this.bikeId).build())
                 .bikeShop(BikeShop.builder().id(this.bikeShopId).build())
+                .customer(User.builder().id(this.customer).build())
                 .maintenanceStatus(this.status)
                 .maintenanceType(this.maintenanceType)
                 .maintenanceDate(this.maintenanceDate)

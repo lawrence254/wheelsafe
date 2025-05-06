@@ -1,5 +1,6 @@
 package com.wheel.safe.wheelsafe.user.dto;
 
+import com.wheel.safe.wheelsafe.user.entity.User;
 import com.wheel.safe.wheelsafe.user.entity.UserRole;
 
 import jakarta.validation.constraints.Email;
@@ -31,4 +32,28 @@ public class UserProfileDTO {
 
     private UserRole role;
     private boolean mfaEnabled;
+
+    public static UserProfileDTO fromEntity(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        return UserProfileDTO.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .build();
+    }
+
+    public static User toEntity(User user) {
+        return User.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .build();
+    }
 }

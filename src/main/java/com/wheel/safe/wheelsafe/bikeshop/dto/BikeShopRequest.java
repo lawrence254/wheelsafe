@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class BikeShopRequest {
-    @Nullable
     private Long id;
     private String name;
     private String address;
@@ -28,20 +27,19 @@ public class BikeShopRequest {
     private String description;
 
     public BikeShop toEntity() {
-        BikeShop bikeShop = new BikeShop();
-        bikeShop.setName(this.name);
-        bikeShop.setAddress(this.address);
-        bikeShop.setPhoneNumber(this.phoneNumber);
-        bikeShop.setEmail(this.email);
-        bikeShop.setWebsite(this.website);
-        bikeShop.setOpeningHours(this.openingHours);
-        bikeShop.setServices(this.services);
-        bikeShop.setLatitude(this.latitude);
-        bikeShop.setLongitude(this.longitude);
-        bikeShop.setImageUrl(this.imageUrl);
-        bikeShop.setDescription(this.description);
-
-        return bikeShop;
+        return BikeShop.builder()
+                .name(this.name)
+                .address(this.address)
+                .phoneNumber(this.phoneNumber)
+                .email(this.email)
+                .website(this.website)
+                .openingHours(this.openingHours)
+                .services(this.services)
+                .latitude(this.latitude)
+                .longitude(this.longitude)
+                .imageUrl(this.imageUrl)
+                .description(this.description)
+                .build();
     }
 
     public static BikeShopRequest fromEntity(BikeShop bikeShop) {

@@ -6,6 +6,9 @@ import com.wheel.safe.wheelsafe.bicycle.dto.BicycleResponse;
 import com.wheel.safe.wheelsafe.bikeshop.entity.Maintenance;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceStatus;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceType;
+import com.wheel.safe.wheelsafe.user.dto.UserProfileDTO;
+import com.wheel.safe.wheelsafe.user.entity.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +22,7 @@ public class MaintenanceResponseDto {
     private Long id;
     private BicycleResponse bike;
     private BikeShopResponse bikeShop;
+    private User customer;
     private MaintenanceType maintenanceType;
     private MaintenanceStatus status;
     private LocalDateTime maintenanceDate;
@@ -37,6 +41,7 @@ public class MaintenanceResponseDto {
                 .id(entity.getId())
                 .bike(entity.getBicycle() != null ? BicycleMapper.toResponse(entity.getBicycle()) : null)
                 .bikeShop(BikeShopResponse.fromEntity(entity.getBikeShop()))
+                .customer(UserProfileDTO.toEntity(entity.getCustomer()))
                 .maintenanceType(entity.getMaintenanceType())
                 .status(entity.getMaintenanceStatus())
                 .maintenanceDate(entity.getMaintenanceDate())

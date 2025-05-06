@@ -1,26 +1,26 @@
 package com.wheel.safe.wheelsafe.bikeshop.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wheel.safe.wheelsafe.bikeshop.dto.BikeShopRequest;
 import com.wheel.safe.wheelsafe.bikeshop.dto.BikeShopResponse;
 import com.wheel.safe.wheelsafe.bikeshop.service.BikeShopService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/bikeshop")
@@ -34,7 +34,7 @@ public class BikeShopController {
     @ApiResponse(responseCode = "200", description = "BikeShop created successfully")
     @ApiResponse(responseCode = "400", description = "Invalid input")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<BikeShopResponse> createBikeShop(@RequestBody BikeShopRequest bikeShopRequest) {
+    public ResponseEntity<BikeShopResponse> createBikeShop(@Valid @RequestBody BikeShopRequest bikeShopRequest) {
         BikeShopResponse bikeShop = bikeShopService.addBikeShop(bikeShopRequest);
         return ResponseEntity.ok(bikeShop);
     }
@@ -60,15 +60,16 @@ public class BikeShopController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     @Operation(summary = "Get a BikeShop by ID", description = "Get a BikeShop by its ID")
     @ApiResponse(responseCode = "200", description = "BikeShop found")
     @ApiResponse(responseCode = "404", description = "BikeShop not found")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<BikeShopResponse> getBikeShopById(@RequestParam Long id) {
+    public ResponseEntity<BikeShopResponse> getBikeShopById(@PathVariable Long id) {
         BikeShopResponse bikeShop = bikeShopService.getBikeShop(id);
         return ResponseEntity.ok(bikeShop);
     }
+
     @GetMapping("/all")
     @Operation(summary = "Get all BikeShops", description = "Get all BikeShops")
     @ApiResponse(responseCode = "200", description = "List of BikeShops found")
@@ -108,6 +109,5 @@ public class BikeShopController {
         List<BikeShopResponse> bikeShops = bikeShopService.getBikeShopsByService(service);
         return ResponseEntity.ok(bikeShops);
     }
-    
-    
+
 }

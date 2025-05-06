@@ -10,9 +10,7 @@ import com.wheel.safe.wheelsafe.bikeshop.entity.SaleStatus;
 
 public interface BikeSaleRepository extends JpaRepository<BikeSale, Long> {
     List<BikeSale> findByBikeShopId(Long bikeShopId);
-    List<BikeSale> findByCustomerId(Long customerId);
-    List<BikeSale> findByStatus(SaleStatus status);
-    List<BikeSale> findByBikeModel(String bikeModel);
+    List<BikeSale> findBySaleStatus(SaleStatus status);
     List<BikeSale> findBySaleDateBetween(Date startDate, Date endDate);
     List<BikeSale> findBySalePriceBetween(Double minPrice, Double maxPrice);
 

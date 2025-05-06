@@ -58,25 +58,13 @@ public class BikeSaleService {
             .map(BikeSaleResponseDto::fromEntity)
             .toList();
     }
-    public List<BikeSaleResponseDto> getSalesByCustomerId(Long customerId) {
-        List<BikeSale> sales = bikeSaleRepository.findByCustomerId(customerId);
-        if (sales.isEmpty()) {
-            throw BikeSaleNotFoundException.withCustomerId(customerId);
-        }
-        return sales.stream()
-            .map(BikeSaleResponseDto::fromEntity)
-            .toList();
-    }
+
     public List<BikeSaleResponseDto> getSalesByStatus(SaleStatus status) {
-        return bikeSaleRepository.findByStatus(status).stream()
+        return bikeSaleRepository.findBySaleStatus(status).stream()
             .map(BikeSaleResponseDto::fromEntity)
             .toList();
     }
-    public List<BikeSaleResponseDto> getSalesByBikeModel(String bikeModel) {
-        return bikeSaleRepository.findByBikeModel(bikeModel).stream()
-            .map(BikeSaleResponseDto::fromEntity)
-            .toList();
-    }
+
     public List<BikeSaleResponseDto> getSalesBySaleDateBetween(Date startDate, Date endDate) {
         return bikeSaleRepository.findBySaleDateBetween(startDate, endDate).stream()
             .map(BikeSaleResponseDto::fromEntity)

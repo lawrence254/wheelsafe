@@ -20,9 +20,9 @@ public class BikeShopService {
     
     
     public BikeShopResponse addBikeShop(BikeShopRequest bikeShopRequest) {
-        if (bikeShopRepository.existsById(bikeShopRequest.getId())) {
-            throw new BikeShopAlreadyExistsException("BikeShop with id " + bikeShopRequest.getId() + " already exists");
-        }
+        // if (bikeShopRequest.getId() != null ){
+        //     throw new BikeShopAlreadyExistsException("BikeShop ID must be empty when creating a new BikeShop");
+        // }
         BikeShop bikeShop = bikeShopRequest.toEntity();
         BikeShop savedBikeShop = bikeShopRepository.save(bikeShop);
         return BikeShopResponse.fromEntity(savedBikeShop);
@@ -52,17 +52,20 @@ public class BikeShopService {
     }
 
     public List<BikeShopResponse> getBikeShopsByName(String name) {
-        List<BikeShop> bikeShops = bikeShopRepository.findByName(name);
+        List<BikeShopResponse> bikeShops = bikeShopRepository.findByName(name)
+                .stream()
+                .map(BikeShopResponse::fromEntity)
+                .toList();
+
         if (bikeShops.isEmpty()) {
             throw new BikeShopNotFoundException("No BikeShops found with name: " + name);
         }
-        return bikeShops.stream()
-                .map(BikeShopResponse::fromEntity)
-                .toList();
+
+        return bikeShops;
     }
 
     public List<BikeShopResponse> getBikeShopsByLocation(String location) {
-        List<BikeShop> bikeShops = bikeShopRepository.findByLocation(location);
+        List<BikeShop> bikeShops = bikeShopRepository.findByAddress(location);
         if (bikeShops.isEmpty()) {
             throw new BikeShopNotFoundException("No BikeShops found at location: " + location);
         }

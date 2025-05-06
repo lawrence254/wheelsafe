@@ -8,7 +8,7 @@ import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 
 public interface BikeShopRepository extends JpaRepository<BikeShop, Long> {
     List<BikeShop> findByName(String name);
-    List<BikeShop> findByLocation(String location);
+    List<BikeShop> findByAddress(String address);
     List<BikeShop> findByServicesContaining(String service);
     
 }
