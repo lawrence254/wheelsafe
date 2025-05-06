@@ -131,7 +131,6 @@ public class BikeSaleController {
     @ApiResponse(responseCode = "404", description = "No Bike Sales found for the specified Sale Date")
     @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<List<BikeSaleResponseDto>> getBikeSalesBySaleDate(@PathVariable String startDate, @PathVariable String endDate) {
-        // Convert the date strings to Date objects
         Date startDateConverted = Date.from(LocalDateTime.parse(startDate).atZone(ZoneId.systemDefault()).toInstant());
         Date endDateConverted = Date.from(LocalDateTime.parse(endDate).atZone(ZoneId.systemDefault()).toInstant());
         List<BikeSaleResponseDto> bikeSales = bikeSaleService.getSalesBySaleDateBetween(startDateConverted, endDateConverted);
