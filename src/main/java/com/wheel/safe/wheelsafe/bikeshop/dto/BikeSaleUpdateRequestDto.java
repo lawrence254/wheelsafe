@@ -2,7 +2,11 @@ package com.wheel.safe.wheelsafe.bikeshop.dto;
 
 import java.time.LocalDateTime;
 
+import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeSale;
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 import com.wheel.safe.wheelsafe.bikeshop.entity.SaleStatus;
+import com.wheel.safe.wheelsafe.user.entity.User;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -37,4 +41,24 @@ public class BikeSaleUpdateRequestDto {
     private String saleDescription;
 
     private String saleImageUrl;
+
+    public BikeSale toEntity(BikeSale existingBikeSale) {
+        BikeSale bikeSale = existingBikeSale != null ? existingBikeSale : new BikeSale();
+        
+        
+        if (existingBikeSale != null) {
+            bikeSale.setId(this.id);
+        }
+        if (this.bicycleId != null) bikeSale.setBicycle(Bicycle.builder().id(this.bicycleId).build());
+        if (this.buyerId != null) bikeSale.setBuyer(User.builder().id(this.buyerId).build());
+        if (this.bikeShopId != null) bikeSale.setBikeShop(BikeShop.builder().id(this.bikeShopId).build());
+        if (this.saleId != null) bikeSale.setSaleId(this.saleId);
+        if (this.salePrice != null) bikeSale.setSalePrice(this.salePrice);
+        if (this.saleDate != null) bikeSale.setSaleDate(this.saleDate);
+        if (this.saleStatus != null) bikeSale.setSaleStatus(this.saleStatus);
+        if (this.saleDescription != null) bikeSale.setSaleDescription(this.saleDescription);
+        if (this.saleImageUrl != null) bikeSale.setSaleImageUrl(this.saleImageUrl);
+        
+        return bikeSale;
+    }
 }

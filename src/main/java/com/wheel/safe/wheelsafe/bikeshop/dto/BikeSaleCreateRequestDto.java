@@ -2,7 +2,11 @@ package com.wheel.safe.wheelsafe.bikeshop.dto;
 
 import java.time.LocalDateTime;
 
+import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeSale;
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 import com.wheel.safe.wheelsafe.bikeshop.entity.SaleStatus;
+import com.wheel.safe.wheelsafe.user.entity.User;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -40,4 +44,18 @@ public class BikeSaleCreateRequestDto {
     private String saleDescription;
 
     private String saleImageUrl;
+
+    public BikeSale toEntity() {
+        return BikeSale.builder()
+                .bicycle(Bicycle.builder().id(bicycleId).build())
+                .buyer(User.builder().id(buyerId).build())
+                .bikeShop(BikeShop.builder().id(bikeShopId).build())
+                .saleId(saleId)
+                .salePrice(salePrice)
+                .saleDate(saleDate)
+                .saleStatus(saleStatus)
+                .saleDescription(saleDescription)
+                .saleImageUrl(saleImageUrl)
+                .build();
+    }
 }
