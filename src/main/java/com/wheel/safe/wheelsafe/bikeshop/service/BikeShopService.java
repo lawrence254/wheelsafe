@@ -19,9 +19,7 @@ public class BikeShopService {
     
     
     public BikeShopResponse addBikeShop(BikeShopRequest bikeShopRequest) {
-        // if (bikeShopRequest.getId() != null ){
-        //     throw new BikeShopAlreadyExistsException("BikeShop ID must be empty when creating a new BikeShop");
-        // }
+        
         BikeShop bikeShop = bikeShopRequest.toEntity();
         BikeShop savedBikeShop = bikeShopRepository.save(bikeShop);
         return BikeShopResponse.fromEntity(savedBikeShop);
