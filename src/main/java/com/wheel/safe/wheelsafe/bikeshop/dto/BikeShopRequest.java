@@ -1,6 +1,5 @@
 package com.wheel.safe.wheelsafe.bikeshop.dto;
 
-import com.beust.jcommander.internal.Nullable;
 import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 
 import lombok.AllArgsConstructor;

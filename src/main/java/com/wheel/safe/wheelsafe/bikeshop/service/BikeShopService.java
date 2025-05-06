@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.wheel.safe.wheelsafe.bikeshop.dto.BikeShopRequest;
 import com.wheel.safe.wheelsafe.bikeshop.dto.BikeShopResponse;
 import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
-import com.wheel.safe.wheelsafe.bikeshop.exceptions.BikeShopAlreadyExistsException;
 import com.wheel.safe.wheelsafe.bikeshop.exceptions.BikeShopNotFoundException;
 import com.wheel.safe.wheelsafe.bikeshop.repository.BikeShopRepository;
 
