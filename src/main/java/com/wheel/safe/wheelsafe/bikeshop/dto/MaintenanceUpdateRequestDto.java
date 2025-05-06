@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 import com.wheel.safe.wheelsafe.bikeshop.entity.Maintenance;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceStatus;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceType;
@@ -46,6 +47,8 @@ public class MaintenanceUpdateRequestDto {
         }
         if (this.bikeId != null)
             maintenance.setBicycle(Bicycle.builder().id(this.bikeId).build());
+        if(this.bikeShopId != null)
+            maintenance.setBikeShop(BikeShop.builder().id(this.bikeShopId).build());
         if (this.maintenanceType != null)
             maintenance.setMaintenanceType(MaintenanceType.valueOf(this.maintenanceType));
         if (this.maintenanceStatus != null)

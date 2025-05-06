@@ -35,6 +35,9 @@ public class Maintenance {
     @ManyToOne
     @JoinColumn(name = "bike_id", nullable = false)
     private Bicycle bicycle;
+    @ManyToOne
+    @JoinColumn(name = "shop_id", nullable = false)
+    private BikeShop bikeShop;
     @Enumerated(EnumType.STRING)
     @Column(name = "maintenance_status")
     private MaintenanceStatus maintenanceStatus;

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 import com.wheel.safe.wheelsafe.bikeshop.entity.Maintenance;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceStatus;
 import com.wheel.safe.wheelsafe.bikeshop.entity.MaintenanceType;
@@ -51,6 +52,7 @@ public class MaintenanceCreateRequestDto {
     public Maintenance toEntity() {
         return Maintenance.builder()
                 .bicycle(Bicycle.builder().id(this.bikeId).build())
+                .bikeShop(BikeShop.builder().id(this.bikeShopId).build())
                 .maintenanceStatus(this.status)
                 .maintenanceType(this.maintenanceType)
                 .maintenanceDate(this.maintenanceDate)

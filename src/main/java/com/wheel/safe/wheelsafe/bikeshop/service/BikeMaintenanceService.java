@@ -92,4 +92,10 @@ public class BikeMaintenanceService {
                 .map(MaintenanceResponseDto::fromEntity)
                 .toList();
     }
+
+    public List<MaintenanceResponseDto> getMaintenanceByShopId(Long bikeShopId) {
+        return maintenanceRepository.findByBikeShopId(bikeShopId).stream()
+                .map(MaintenanceResponseDto::fromEntity)
+                .toList();
+    }
 }
