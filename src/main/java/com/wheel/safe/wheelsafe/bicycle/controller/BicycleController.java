@@ -193,7 +193,7 @@ public class BicycleController {
             existingBicycle.setBrand(request.getBrand());
             existingBicycle.setSerialNumber(request.getSerialNumber());
             existingBicycle.setColor(request.getColor());
-            existingBicycle.setType(BicycleType.valueOf(request.getType())); // Convert string to enum
+            existingBicycle.setType(request.getType());
             existingBicycle.setSize(request.getSize());
             existingBicycle.setFrameMaterial(request.getFrameMaterial());
             existingBicycle.setGearSystem(request.getGearSystem());

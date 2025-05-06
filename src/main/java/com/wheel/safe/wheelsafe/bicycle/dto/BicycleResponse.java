@@ -1,5 +1,7 @@
 package com.wheel.safe.wheelsafe.bicycle.dto;
 
+import com.wheel.safe.wheelsafe.bicycle.entity.BicycleType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +17,7 @@ public class BicycleResponse {
     private String brand;
     private String serialNumber;
     private String color;
-    private String type;
+    private BicycleType type;
     private String size;
     private String frameMaterial;
     private String gearSystem;

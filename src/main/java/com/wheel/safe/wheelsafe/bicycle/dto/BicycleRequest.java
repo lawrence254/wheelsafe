@@ -17,7 +17,7 @@ public class BicycleRequest {
     private String brand;
     private String serialNumber;
     private String color;
-    private String type;
+    private BicycleType type;
     private String size;
     private String frameMaterial;
     private String gearSystem;
@@ -32,7 +32,7 @@ public class BicycleRequest {
         bicycle.setBrand(this.brand);
         bicycle.setSerialNumber(this.serialNumber);
         bicycle.setColor(this.color);
-        bicycle.setType(BicycleType.valueOf(this.type));
+        bicycle.setType(BicycleType.valueOf(this.type.name()));
         bicycle.setSize(this.size);
         bicycle.setFrameMaterial(this.frameMaterial);
         bicycle.setGearSystem(this.gearSystem);
