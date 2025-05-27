@@ -2,6 +2,9 @@ package com.wheel.safe.wheelsafe.bikeshop.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.CreationTimestamp;
+
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.user.entity.User;
 
@@ -15,8 +18,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -51,20 +52,11 @@ public class BikeSale {
     private SaleStatus saleStatus;
     private String saleDescription;
     private String saleImageUrl;
+
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

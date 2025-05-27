@@ -18,10 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BikeSaleService {
     private final BikeSaleRepository bikeSaleRepository;
-    private final BikeShopService bikeShopService;
 
     public BikeSaleResponseDto createSale(BikeSaleCreateRequestDto bikeSale) {
-        bikeShopService.getBikeShop(bikeSale.getBikeShopId());
         BikeSale sale = bikeSale.toEntity();
         sale.setSaleStatus(SaleStatus.PENDING);
         BikeSale savedSale = bikeSaleRepository.save(sale);

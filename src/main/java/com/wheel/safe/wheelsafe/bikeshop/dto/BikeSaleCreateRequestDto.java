@@ -29,8 +29,6 @@ public class BikeSaleCreateRequestDto {
     @NotNull(message = "Bike shop ID is required")
     private Long bikeShopId;
 
-    private Long saleId;
-
     @NotNull(message = "Sale price is required")
     @Min(value = 0, message = "Sale price must be greater than or equal to 0")
     private Double salePrice;
@@ -50,7 +48,6 @@ public class BikeSaleCreateRequestDto {
                 .bicycle(Bicycle.builder().id(bicycleId).build())
                 .buyer(User.builder().id(buyerId).build())
                 .bikeShop(BikeShop.builder().id(bikeShopId).build())
-                .saleId(saleId)
                 .salePrice(salePrice)
                 .saleDate(saleDate)
                 .saleStatus(saleStatus)

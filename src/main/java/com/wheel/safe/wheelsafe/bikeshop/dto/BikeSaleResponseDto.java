@@ -24,7 +24,6 @@ public class BikeSaleResponseDto {
     private UserProfileDTO buyer;
     private Long bikeShopId;
     private String bikeShopName;
-    private Long saleId;
     private Double salePrice;
     private LocalDateTime saleDate;
     private SaleStatus saleStatus;
@@ -56,7 +55,6 @@ public class BikeSaleResponseDto {
                 .buyer(userDto)
                 .bikeShopId(entity.getBikeShop() != null ? entity.getBikeShop().getId() : null)
                 .bikeShopName(entity.getBikeShop() != null ? entity.getBikeShop().getName() : null)
-                .saleId(entity.getSaleId())
                 .salePrice(entity.getSalePrice())
                 .saleDate(entity.getSaleDate())
                 .saleStatus(entity.getSaleStatus())
