@@ -2,6 +2,7 @@ package com.wheel.safe.wheelsafe.bicycle.dto;
 
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.bicycle.entity.BicycleType;
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class BicycleRequest {
     private String brakeType;
     private String tireSize;
     private String accessories;
+    private Long shopId; // Assuming this is the ID of the shop where the bicycle is registered
 
     // Convert BicycleRequest to Bicycle entity
     public Bicycle toEntity() {
@@ -39,6 +41,12 @@ public class BicycleRequest {
         bicycle.setBrakeType(this.brakeType);
         bicycle.setTireSize(this.tireSize);
         bicycle.setAccessories(this.accessories);
+
+        if( this.shopId != null) {
+            BikeShop shop = new BikeShop();
+            shop.setId(this.shopId);
+            bicycle.setShopId(shop);
+        }
         
         return bicycle;
     }

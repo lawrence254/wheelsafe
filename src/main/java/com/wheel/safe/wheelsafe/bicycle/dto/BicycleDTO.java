@@ -27,4 +27,5 @@ public class BicycleDTO {
     private String brakeType;
     private String tireSize;
     private String accessories;
+    private Long shopId;
 }

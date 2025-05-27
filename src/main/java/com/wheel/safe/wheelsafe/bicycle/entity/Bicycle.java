@@ -2,6 +2,9 @@ package com.wheel.safe.wheelsafe.bicycle.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 
 import jakarta.persistence.Column;
@@ -77,20 +80,10 @@ public class Bicycle {
     private String brakeType;
     private String tireSize;
     private String accessories;
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-    
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

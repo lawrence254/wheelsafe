@@ -2,6 +2,7 @@ package com.wheel.safe.wheelsafe.bicycle.dto;
 
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.bicycle.entity.BicycleType;
+import com.wheel.safe.wheelsafe.bikeshop.entity.BikeShop;
 
 public class BicycleMapper {
 
@@ -10,6 +11,7 @@ public class BicycleMapper {
             .id(bicycle.getId())
             .model(bicycle.getModel())
             .brand(bicycle.getBrand())
+            .shopId(bicycle.getShopId() != null ? bicycle.getShopId().getId() : null)
             .serialNumber(bicycle.getSerialNumber())
             .color(bicycle.getColor())
             .type(bicycle.getType().name())
@@ -23,7 +25,7 @@ public class BicycleMapper {
     }
 
     public static Bicycle toEntity(BicycleRequest request) {
-        return Bicycle.builder()
+        Bicycle bicycle= Bicycle.builder()
                 .model(request.getModel())
                 .brand(request.getBrand())
                 .serialNumber(request.getSerialNumber())
@@ -36,11 +38,19 @@ public class BicycleMapper {
                 .tireSize(request.getTireSize())
                 .accessories(request.getAccessories())
                 .build();
+
+                if( request.getShopId() != null) {
+                    BikeShop shop = new BikeShop();
+                    shop.setId(request.getShopId());
+                    bicycle.setShopId(shop);
+                }
+                return bicycle;
     }
 
     public static BicycleResponse toResponse(Bicycle bicycle) {
         return BicycleResponse.builder()
                 .id(bicycle.getId())
+                .shopId(bicycle.getShopId() != null ? bicycle.getShopId().getId() : null)
                 .model(bicycle.getModel())
                 .brand(bicycle.getBrand())
                 .serialNumber(bicycle.getSerialNumber())

@@ -15,6 +15,7 @@ public class BicycleResponse {
     private Long id;
     private String model;
     private String brand;
+    private Long shopId;
     private String serialNumber;
     private String color;
     private BicycleType type;
