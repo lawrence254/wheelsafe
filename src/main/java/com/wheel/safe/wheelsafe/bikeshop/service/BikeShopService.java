@@ -49,7 +49,7 @@ public class BikeShopService {
     }
 
     public List<BikeShopResponse> getBikeShopsByName(String name) {
-        List<BikeShopResponse> bikeShops = bikeShopRepository.findByName(name)
+        List<BikeShopResponse> bikeShops = bikeShopRepository.findByNameContainingIgnoreCase(name)
                 .stream()
                 .map(BikeShopResponse::fromEntity)
                 .toList();
@@ -61,8 +61,10 @@ public class BikeShopService {
         return bikeShops;
     }
 
+
+
     public List<BikeShopResponse> getBikeShopsByLocation(String location) {
-        List<BikeShop> bikeShops = bikeShopRepository.findByAddress(location);
+        List<BikeShop> bikeShops = bikeShopRepository.findByAddressContainingIgnoreCase(location);
         if (bikeShops.isEmpty()) {
             throw new BikeShopNotFoundException("No BikeShops found at location: " + location);
         }
@@ -72,7 +74,7 @@ public class BikeShopService {
     }
 
     public List<BikeShopResponse> getBikeShopsByService(String service) {
-        List<BikeShop> bikeShops = bikeShopRepository.findByServicesContaining(service);
+        List<BikeShop> bikeShops = bikeShopRepository.findByServicesContainingIgnoreCase(service);
         if (bikeShops.isEmpty()) {
             throw new BikeShopNotFoundException("No BikeShops found offering service: " + service);
         }

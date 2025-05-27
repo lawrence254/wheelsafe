@@ -97,7 +97,7 @@ public class BikeSaleController {
         List<BikeSaleResponseDto> bikeSales = bikeSaleService.getSalesByBikeShopId(bikeShopId);
         return ResponseEntity.ok(bikeSales);
     }
- 
+
     @GetMapping("/status/{status}")
     @Operation(summary = "Get Bike Sales by Status", description = "Get all Bike Sales for a specific Status")
     @ApiResponse(responseCode = "200", description = "Bike Sales retrieved successfully")
@@ -113,10 +113,12 @@ public class BikeSaleController {
     @ApiResponse(responseCode = "200", description = "Bike Sales retrieved successfully")
     @ApiResponse(responseCode = "404", description = "No Bike Sales found for the specified Sale Date")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<BikeSaleResponseDto>> getBikeSalesBySaleDate(@PathVariable String startDate, @PathVariable String endDate) {
+    public ResponseEntity<List<BikeSaleResponseDto>> getBikeSalesBySaleDate(@PathVariable String startDate,
+            @PathVariable String endDate) {
         Date startDateConverted = Date.from(LocalDateTime.parse(startDate).atZone(ZoneId.systemDefault()).toInstant());
         Date endDateConverted = Date.from(LocalDateTime.parse(endDate).atZone(ZoneId.systemDefault()).toInstant());
-        List<BikeSaleResponseDto> bikeSales = bikeSaleService.getSalesBySaleDateBetween(startDateConverted, endDateConverted);
+        List<BikeSaleResponseDto> bikeSales = bikeSaleService.getSalesBySaleDateBetween(startDateConverted,
+                endDateConverted);
         return ResponseEntity.ok(bikeSales);
     }
 
@@ -125,9 +127,10 @@ public class BikeSaleController {
     @ApiResponse(responseCode = "200", description = "Bike Sales retrieved successfully")
     @ApiResponse(responseCode = "404", description = "No Bike Sales found for the specified Sale Price")
     @ApiResponse(responseCode = "500", description = "Internal server error")
-    public ResponseEntity<List<BikeSaleResponseDto>> getBikeSalesBySalePrice(@PathVariable Double minPrice, @PathVariable Double maxPrice) {
+    public ResponseEntity<List<BikeSaleResponseDto>> getBikeSalesBySalePrice(@PathVariable Double minPrice,
+            @PathVariable Double maxPrice) {
         List<BikeSaleResponseDto> bikeSales = bikeSaleService.getSalesBySalePriceBetween(minPrice, maxPrice);
         return ResponseEntity.ok(bikeSales);
     }
-    
+
 }
