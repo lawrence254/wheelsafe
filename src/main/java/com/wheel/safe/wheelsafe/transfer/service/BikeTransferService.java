@@ -57,7 +57,7 @@ public class BikeTransferService {
     }
 
     public List<BikeTransferResponseDTO> getTransfersByStatus(String status) {
-        return bikeTransferRepository.findByTransferStatus(status).stream()
+        return bikeTransferRepository.findByTransferStatus(status.toUpperCase()).stream()
                 .map(BikeTransferResponseDTO::summaryFromEntity)
                 .toList();
     }
@@ -83,4 +83,33 @@ public class BikeTransferService {
         bikeTransferRepository.delete(bikeTransfer);
     }
 
+    public List<BikeTransferResponseDTO> searchTransfers(String status, Long bicycleId, Long previousOwnerId,
+            Long newOwnerId) {
+        return bikeTransferRepository.findAll().stream()
+            .filter(transfer -> {
+                if (status != null && !status.isEmpty() && 
+                    !transfer.getTransferStatus().toString().toLowerCase().contains(status.toLowerCase())) {
+                    return false;
+                }
+                
+                
+                if (bicycleId != null && !transfer.getBicycle().getId().equals(bicycleId)) {
+                    return false;
+                }
+                
+                
+                if (previousOwnerId != null && !transfer.getPreviousOwner().getId().equals(previousOwnerId)) {
+                    return false;
+                }
+                
+                if (newOwnerId != null && !transfer.getNewOwner().getId().equals(newOwnerId)) {
+                    return false;
+                }
+                
+                return true;
+            })
+            .map(BikeTransferResponseDTO::summaryFromEntity)
+            .toList();
+
+    }
 }
