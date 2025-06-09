@@ -9,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.user.entity.User;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
