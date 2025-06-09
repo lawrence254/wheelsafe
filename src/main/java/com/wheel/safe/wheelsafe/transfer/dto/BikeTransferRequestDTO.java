@@ -1,5 +1,7 @@
 package com.wheel.safe.wheelsafe.transfer.dto;
 
+import java.time.LocalDate;
+
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.transfer.entity.BikeTransfer;
 import com.wheel.safe.wheelsafe.transfer.entity.TransferStatus;
@@ -35,15 +37,31 @@ public class BikeTransferRequestDTO {
     private String transferDescription;
 
 public BikeTransfer toEntity() {
+
+    LocalDate parsedDate = LocalDate.now();
+        if (transferDate != null && !transferDate.trim().isEmpty()) {
+            try {
+                parsedDate = LocalDate.parse(transferDate);
+            } catch (Exception e) {
+            }
+        }
+        
+        TransferStatus status = TransferStatus.PENDING;
+        if (transferStatus != null && !transferStatus.trim().isEmpty()) {
+            try {
+                status = TransferStatus.valueOf(transferStatus.toUpperCase());
+            } catch (IllegalArgumentException e) {
+            }
+        }
         return BikeTransfer.builder()
                 .bicycle(Bicycle.builder().id(bicycleId).build())
                 .previousOwner(User.builder().id(previousOwnerId).build())
                 .newOwner(User.builder().id(newOwnerId).build())
+                .transferDate(parsedDate)
                 .transferReason(transferReason)
                 .verificationCode(verificationCode)
-                .transferStatus(TransferStatus.valueOf(transferStatus))
+                .transferStatus(status)
                 .cost(cost)
-                .transferReason(transferDescription)
                 .build();
     }
 }
