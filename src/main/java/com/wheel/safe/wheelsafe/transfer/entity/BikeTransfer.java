@@ -35,7 +35,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString(exclude = {"verificationCode"})
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Transfer {
+public class BikeTransfer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -67,7 +67,7 @@ public class Transfer {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TransferStatus status;
+    private TransferStatus transferStatus;
 
     @CreationTimestamp
     @Column(name = "created_at")
