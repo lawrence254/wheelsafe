@@ -1,9 +1,6 @@
 package com.wheel.safe.wheelsafe.transfer.dto;
 
-import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.transfer.entity.BikeTransfer;
-import com.wheel.safe.wheelsafe.user.entity.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
