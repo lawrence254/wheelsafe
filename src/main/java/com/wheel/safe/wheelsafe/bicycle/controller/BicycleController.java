@@ -10,13 +10,12 @@ package com.wheel.safe.wheelsafe.bicycle.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wheel.safe.wheelsafe.bicycle.dto.BicycleDTO;
+import com.google.zxing.WriterException;
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleRequest;
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleResponse;
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
-import com.wheel.safe.wheelsafe.bicycle.entity.BicycleType;
-import com.wheel.safe.wheelsafe.bicycle.service.BicycleQRCodeService;
 import com.wheel.safe.wheelsafe.bicycle.service.BicycleService;
+import com.wheel.safe.wheelsafe.utilities.QRCodeGenerator;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleMapper;
 import jakarta.validation.Valid;
-import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +40,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 @io.swagger.v3.oas.annotations.tags.Tag(name = "Bicycle", description = "Operations related to bicycles")
 public class BicycleController {
     private final BicycleService bicycleService;
-    private final BicycleQRCodeService bicycleQRCodeService;
 
     /**
      * Create a new bicycle
@@ -63,16 +57,11 @@ public class BicycleController {
             Bicycle bicycle = BicycleMapper.toEntity(request);
             Bicycle savedBicycle = bicycleService.addBicycle(bicycle);
 
-            // Convert to DTO for QR code generation
-            BicycleDTO bicycleDTO = BicycleMapper.toDto(savedBicycle);
-
-            // Generate QR code
-            byte[] qrCodeBytes = bicycleQRCodeService.generateQrCode(bicycleDTO);
-            String qrCodeBase64 = Base64.getEncoder().encodeToString(qrCodeBytes);
+            String qrCodeString = QRCodeGenerator.generateQRCode(BicycleMapper.toDto(savedBicycle));
 
             // Create response with QR code URL
             BicycleResponse response = BicycleMapper.toResponse(savedBicycle);
-            response.setQrCodeUrl("data:image/png;base64," + qrCodeBase64);
+            response.setQrCodeUrl(qrCodeString);
 
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -100,22 +89,17 @@ public class BicycleController {
      * 
      * @param id The bicycle ID
      * @return ResponseEntity containing the bicycle response
+     * @throws WriterException 
      */
     @GetMapping("/{id}")
-    public ResponseEntity<BicycleResponse> getBicycleById(@PathVariable Long id) {
+    public ResponseEntity<BicycleResponse> getBicycleById(@PathVariable Long id) throws WriterException {
         try {
             Bicycle bicycle = bicycleService.getBicycleById(id);
             BicycleResponse response = BicycleMapper.toResponse(bicycle);
 
-            // Generate QR code for the response
-            try {
-                BicycleDTO bicycleDTO = BicycleMapper.toDto(bicycle);
-                byte[] qrCodeBytes = bicycleQRCodeService.generateQrCode(bicycleDTO);
-                String qrCodeBase64 = Base64.getEncoder().encodeToString(qrCodeBytes);
-                response.setQrCodeUrl("data:image/png;base64," + qrCodeBase64);
-            } catch (Exception e) {
-                // Continue even if QR code generation fails
-            }
+           String qrCodeString = QRCodeGenerator.generateQRCode(BicycleMapper.toDto(bicycle));
+
+           response.setQrCodeUrl(qrCodeString);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -180,10 +164,11 @@ public class BicycleController {
      * @param id      The bicycle ID
      * @param request The updated bicycle data
      * @return ResponseEntity containing the updated bicycle response
+     * @throws WriterException 
      */
     @PutMapping("/{id}")
     public ResponseEntity<BicycleResponse> updateBicycle(@PathVariable Long id,
-            @Valid @RequestBody BicycleRequest request) {
+            @Valid @RequestBody BicycleRequest request) throws WriterException {
         try {
             // Get existing bicycle
             Bicycle existingBicycle = bicycleService.getBicycleById(id);
@@ -206,14 +191,9 @@ public class BicycleController {
             BicycleResponse response = BicycleMapper.toResponse(updatedBicycle);
 
             // Generate new QR code
-            try {
-                BicycleDTO bicycleDTO = BicycleMapper.toDto(updatedBicycle);
-                byte[] qrCodeBytes = bicycleQRCodeService.generateQrCode(bicycleDTO);
-                String qrCodeBase64 = Base64.getEncoder().encodeToString(qrCodeBytes);
-                response.setQrCodeUrl("data:image/png;base64," + qrCodeBase64);
-            } catch (Exception e) {
-                // Continue even if QR code generation fails
-            }
+            
+                String qr = QRCodeGenerator.generateQRCode(BicycleMapper.toDto(updatedBicycle));
+                response.setQrCodeUrl(qr);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -246,21 +226,18 @@ public class BicycleController {
      * 
      * @param id The bicycle ID
      * @return ResponseEntity containing the QR code as base64 string
+     * @throws WriterException 
      */
     @GetMapping("/{id}/qrcode")
-    public ResponseEntity<String> generateQRCode(@PathVariable Long id) {
+    public ResponseEntity<String> generateQRCode(@PathVariable Long id) throws WriterException {
         try {
             Bicycle bicycle = bicycleService.getBicycleById(id);
-            BicycleDTO bicycleDTO = BicycleMapper.toDto(bicycle);
 
-            byte[] qrCodeBytes = bicycleQRCodeService.generateQrCode(bicycleDTO);
-            String qrCodeBase64 = Base64.getEncoder().encodeToString(qrCodeBytes);
+            String qr = QRCodeGenerator.generateQRCode(BicycleMapper.toDto(bicycle));
 
-            return new ResponseEntity<>("data:image/png;base64," + qrCodeBase64, HttpStatus.OK);
+            return new ResponseEntity<>(qr, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (IOException | com.google.zxing.WriterException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
