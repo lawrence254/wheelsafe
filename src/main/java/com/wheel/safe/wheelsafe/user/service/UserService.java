@@ -1,5 +1,7 @@
 package com.wheel.safe.wheelsafe.user.service;
 
+import java.util.List;
+
 import org.springframework.context.support.BeanDefinitionDsl.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,19 @@ public class UserService {
     public UserProfileDTO getUserProfileById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new InvalidCredentialsException("User not found"));
+
+        return mapToUserProfileDTO(user);
+    }
+    @Transactional
+    public UserProfileDTO updateUserRoles(RoleUpdateDTO roleUpdateDTO) {
+        User user = userRepository.findById(roleUpdateDTO.getUserId)
+                .orElseThrow(() -> new InvalidCredentialsException("User not found"));
+
+        List<UserRole> userRoles = roleUpdateDTO.getRoles().stream()
+                .map(roleName -> new UserRole(roleName))
+                .collect(Collectors.toList());
+        user.setUserRoles(userRoles);
+        userRepository.save(user);
 
         return mapToUserProfileDTO(user);
     }

@@ -8,6 +8,8 @@ import com.wheel.safe.wheelsafe.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.management.relation.Role;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -36,6 +38,11 @@ public class UserController {
     }
 
     // Add a path to handle role assignment and changes, All changes to roles can only be done by admins
+    @PutMapping("/update-roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserProfileDTO> updateUserRoles(@RequestBody RoleUpdateDTO roleUpdates) {
+        return ResponseEntity.ok(userService.updateUserRoles(roleUpdates));
+    }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(authentication, #id)")
