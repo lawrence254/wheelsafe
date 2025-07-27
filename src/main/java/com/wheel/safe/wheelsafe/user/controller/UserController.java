@@ -35,6 +35,8 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUserProfile(authentication.getName(), profile));
     }
 
+    // Add a path to handle role assignment and changes, All changes to roles can only be done by admins
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userSecurity.isCurrentUser(authentication, #id)")
     public ResponseEntity<UserProfileDTO> getUserById(@PathVariable Long id){

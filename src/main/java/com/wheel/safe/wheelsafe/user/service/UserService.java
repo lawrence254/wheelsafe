@@ -1,5 +1,6 @@
 package com.wheel.safe.wheelsafe.user.service;
 
+import org.springframework.context.support.BeanDefinitionDsl.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -78,7 +79,7 @@ public class UserService {
                 .lastName(user.getLastName())
                 .email(user.getUsername())
                 .phoneNumber(user.getPhoneNumber())
-                .role(user.getRole())
+                .roles(user.getUserRoles().stream().toList())
                 .mfaEnabled(user.isMfaEnabled())
                 .build();
     }

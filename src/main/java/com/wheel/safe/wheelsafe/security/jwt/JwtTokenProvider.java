@@ -37,7 +37,7 @@ public class JwtTokenProvider {
         User user = (User) userDetails;
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", user.getId());
-        claims.put("role", user.getRole());
+        claims.put("roles", user.getUserRoles().stream().map(Enum::name).toList());
 
         return Jwts.builder()
                 .setClaims(claims)
