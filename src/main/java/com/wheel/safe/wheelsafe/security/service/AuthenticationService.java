@@ -1,5 +1,9 @@
 package com.wheel.safe.wheelsafe.security.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @Author: Lawrence Karanja
  * @Date: 2023-10-01
@@ -51,13 +55,13 @@ public class AuthenticationService {
             .email(request.getEmail())
             .password(passwordEncoder.encode(request.getPassword()))
             .phoneNumber(request.getPhoneNumber())
-            .role(request.getRole())
+            .userRoles(new HashSet<>(request.getRoles()))
             .enabled(true)
             .accountNonLocked(true)
             .mfaEnabled(false)
             .build();
             
-        if(request.getRole() != UserRole.REGULAR_USER){
+        if (!request.getRoles().contains(UserRole.REGULAR_USER)) {
             user.setEnabled(false);
         }
 
@@ -67,14 +71,14 @@ public class AuthenticationService {
         String refreshToken = jwtTokenProvider.generateRefreshToken(user);
 
         return AuthResponse.builder()
-            .accessToken(accessToken)
-            .refreshToken(refreshToken)
-            .tokenType("Bearer")
-            .expiresIn(jwtTokenProvider.getAccessTokenExpirationTime()/1000)
-            .userId(user.getId().toString())
-            .userRole(user.getRole().toString())
-            .mfaRequired(false)
-            .build();
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
+                .expiresIn(jwtTokenProvider.getAccessTokenExpirationTime() / 1000)
+                .userId(user.getId().toString())
+                .userRoles(user.getUserRoles().stream().toList())
+                .mfaRequired(false)
+                .build();
     }
 
     public AuthResponse authenticate(AuthRequest request){
@@ -106,7 +110,7 @@ public class AuthenticationService {
                     .tokenType("Bearer")
                     .expiresIn(jwtTokenProvider.getAccessTokenExpirationTime() / 1000)
                     .userId(user.getId().toString())
-                    .userRole(user.getRole().toString())
+                    .userRoles(user.getUserRoles().stream().toList())
                     .mfaRequired(false)
                     .build();
 
@@ -138,7 +142,7 @@ public class AuthenticationService {
                     .tokenType("Bearer")
                     .expiresIn(jwtTokenProvider.getAccessTokenExpirationTime() / 1000)
                     .userId(user.getId().toString())
-                    .userRole(user.getRole().toString())
+                    .userRoles(user.getUserRoles().stream().toList())
                     .mfaRequired(false)
                     .build();
             
