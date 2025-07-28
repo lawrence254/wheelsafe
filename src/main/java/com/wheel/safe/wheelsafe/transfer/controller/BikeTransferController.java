@@ -43,7 +43,7 @@ public class BikeTransferController {
             description = "Creates a new bike transfer record with the provided details.")
     @ApiResponse(
             responseCode = "200",
-            description = "Bike transfer created successfully")
+            description = "Bike transfer record created successfully")
     @ApiResponse(
             responseCode = "400",
             description = "Invalid request data")
