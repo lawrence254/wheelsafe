@@ -19,6 +19,7 @@ import com.wheel.safe.wheelsafe.bikeshop.service.BikeShopService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/bikeshop")
 @RequiredArgsConstructor
 @Schema(description = "Bike Shop API")
+@Tag(name = "BikeShop", description = "Bike shop management endpoints")
 public class BikeShopController {
     private final BikeShopService bikeShopService;
 

@@ -11,6 +11,7 @@ import com.wheel.safe.wheelsafe.bikeshop.service.BikeMaintenanceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/bikeshop/maintenance")
 @RequiredArgsConstructor
 @Schema(description = "Controller for handling bike maintenance at a shop")
+@Tag(name = "ShopMaintenance", description = "Operations for bike maintenance at shops")
 public class ShopMaintenanceController {
     private final BikeMaintenanceService bikeMaintenanceService;
 

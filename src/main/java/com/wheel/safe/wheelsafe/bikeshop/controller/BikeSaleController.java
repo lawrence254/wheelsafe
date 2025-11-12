@@ -29,12 +29,14 @@ import com.wheel.safe.wheelsafe.bikeshop.service.BikeSaleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/bikeshop/sales")
 @RequiredArgsConstructor
 @Schema(description = "Bike Sale API")
+@Tag(name = "BikeSale", description = "Operations for bike sales")
 public class BikeSaleController {
     private final BikeSaleService bikeSaleService;
 
@@ -78,6 +80,7 @@ public class BikeSaleController {
         BikeSaleResponseDto bikeSale = bikeSaleService.getSale(id);
         return ResponseEntity.ok(bikeSale);
     }
+
     @GetMapping("/all")
     @Operation(summary = "Get all Bike Sales", description = "Get all existing Bike Sales")
     @ApiResponse(responseCode = "200", description = "Bike Sales retrieved successfully")
