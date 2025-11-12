@@ -18,12 +18,11 @@ public class JwtTest {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
 
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
                     .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
+                    .parseSignedClaims(token)
+                    .getPayload();
             System.out.println("Token parsed successfully!");
             System.out.println("Subject: " + claims.getSubject());
             System.out.println("Role: " + claims.get("role"));

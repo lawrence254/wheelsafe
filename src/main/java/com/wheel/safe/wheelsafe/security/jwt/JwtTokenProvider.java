@@ -40,20 +40,20 @@ public class JwtTokenProvider {
         claims.put("roles", user.getUserRoles().stream().map(Enum::name).toList());
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccess()))
-                .signWith(signingKey, SignatureAlgorithm.HS256)
+                .claims(claims)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + jwtProperties.getRefresh()))
+                .signWith(signingKey)
                 .compact();
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getRefresh()))
-                .signWith(signingKey, SignatureAlgorithm.HS256)
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + jwtProperties.getRefresh()))
+                .signWith(signingKey)
                 .compact();
     }
 
@@ -67,11 +67,11 @@ public class JwtTokenProvider {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(signingKey)
+        return Jwts.parser()
+                .verifyWith(signingKey)
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {

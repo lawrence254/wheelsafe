@@ -1,4 +1,5 @@
 package com.wheel.safe.wheelsafe.bicycle.controller;
+
 /**
  * @Author: Lawrence Karanja
  * @Date: 2023/10/12
@@ -7,31 +8,34 @@ package com.wheel.safe.wheelsafe.bicycle.controller;
  * It will also handle any necessary validation and error handling for the requests.
  */
 
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.zxing.WriterException;
+import com.wheel.safe.wheelsafe.bicycle.dto.BicycleMapper;
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleRequest;
 import com.wheel.safe.wheelsafe.bicycle.dto.BicycleResponse;
 import com.wheel.safe.wheelsafe.bicycle.entity.Bicycle;
 import com.wheel.safe.wheelsafe.bicycle.service.BicycleService;
 import com.wheel.safe.wheelsafe.utilities.QRCodeGenerator;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import com.wheel.safe.wheelsafe.bicycle.dto.BicycleMapper;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import java.util.List;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/bicycle")
@@ -75,6 +79,9 @@ public class BicycleController {
      * @return ResponseEntity containing list of all bicycles
      */
     @GetMapping
+    @Operation(summary = "Get all bicycles", description = "Retrieves all bicycles in the system")
+    @ApiResponse(responseCode = "200", description = "List of bicycles retrieved successfully")
+    @ApiResponse(responseCode = "500", description = "Internal server error")
     public ResponseEntity<List<BicycleResponse>> getAllBicycles() {
         List<Bicycle> bicycles = bicycleService.getAllBicycles();
         List<BicycleResponse> responses = bicycles.stream()
@@ -89,17 +96,24 @@ public class BicycleController {
      * 
      * @param id The bicycle ID
      * @return ResponseEntity containing the bicycle response
-     * @throws WriterException 
+     * @throws WriterException
      */
+    @Operation(summary = "Get bicycle by ID", description = "Retrieves a bicycle by its database ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Bicycle found"),
+            @ApiResponse(responseCode = "404", description = "Bicycle not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<BicycleResponse> getBicycleById(@PathVariable Long id) throws WriterException {
+    public ResponseEntity<BicycleResponse> getBicycleById(
+            @Parameter(description = "ID of the bicycle") @PathVariable Long id) throws WriterException {
         try {
             Bicycle bicycle = bicycleService.getBicycleById(id);
             BicycleResponse response = BicycleMapper.toResponse(bicycle);
 
-           String qrCodeString = QRCodeGenerator.generateQRCode(BicycleMapper.toDto(bicycle));
+            String qrCodeString = QRCodeGenerator.generateQRCode(BicycleMapper.toDto(bicycle));
 
-           response.setQrCodeUrl(qrCodeString);
+            response.setQrCodeUrl(qrCodeString);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -114,7 +128,13 @@ public class BicycleController {
      * @return ResponseEntity containing the bicycle response
      */
     @GetMapping("/serial/{serialNumber}")
-    public ResponseEntity<BicycleResponse> getBicycleBySerialNumber(@PathVariable String serialNumber) {
+    @Operation(summary = "Get bicycle by serial number", description = "Retrieves a bicycle by its serial number")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Bicycle found"),
+            @ApiResponse(responseCode = "404", description = "Bicycle not found"),
+    })
+    public ResponseEntity<BicycleResponse> getBicycleBySerialNumber(
+            @Parameter(description = "Serial number of the bicycle") @PathVariable String serialNumber) {
         try {
             Bicycle bicycle = bicycleService.getBicycleBySerialNumber(serialNumber);
             BicycleResponse response = BicycleMapper.toResponse(bicycle);
@@ -131,7 +151,13 @@ public class BicycleController {
      * @return ResponseEntity containing the bicycle response
      */
     @GetMapping("/brand/{brand}")
-    public ResponseEntity<BicycleResponse> getBicycleByBrand(@PathVariable String brand) {
+    @Operation(summary = "Get bicycle by brand", description = "Retrieves a bicycle by brand")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Bicycle found"),
+            @ApiResponse(responseCode = "404", description = "Bicycle not found"),
+    })
+    public ResponseEntity<BicycleResponse> getBicycleByBrand(
+            @Parameter(description = "Brand name") @PathVariable String brand) {
         try {
             Bicycle bicycle = bicycleService.getBicycleByBrand(brand);
             BicycleResponse response = BicycleMapper.toResponse(bicycle);
@@ -148,7 +174,13 @@ public class BicycleController {
      * @return ResponseEntity containing the bicycle response
      */
     @GetMapping("/model/{model}")
-    public ResponseEntity<BicycleResponse> getBicycleByModel(@PathVariable String model) {
+    @Operation(summary = "Get bicycle by model", description = "Retrieves a bicycle by model")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Bicycle found"),
+            @ApiResponse(responseCode = "404", description = "Bicycle not found"),
+    })
+    public ResponseEntity<BicycleResponse> getBicycleByModel(
+            @Parameter(description = "Model name") @PathVariable String model) {
         try {
             Bicycle bicycle = bicycleService.getBicycleByModel(model);
             BicycleResponse response = BicycleMapper.toResponse(bicycle);
@@ -164,10 +196,17 @@ public class BicycleController {
      * @param id      The bicycle ID
      * @param request The updated bicycle data
      * @return ResponseEntity containing the updated bicycle response
-     * @throws WriterException 
+     * @throws WriterException
      */
     @PutMapping("/{id}")
-    public ResponseEntity<BicycleResponse> updateBicycle(@PathVariable Long id,
+    @Operation(summary = "Update a bicycle", description = "Updates an existing bicycle by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Bicycle updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "404", description = "Bicycle not found"),
+    })
+    public ResponseEntity<BicycleResponse> updateBicycle(
+            @Parameter(description = "ID of the bicycle") @PathVariable Long id,
             @Valid @RequestBody BicycleRequest request) throws WriterException {
         try {
             // Get existing bicycle
@@ -191,9 +230,9 @@ public class BicycleController {
             BicycleResponse response = BicycleMapper.toResponse(updatedBicycle);
 
             // Generate new QR code
-            
-                String qr = QRCodeGenerator.generateQRCode(BicycleMapper.toDto(updatedBicycle));
-                response.setQrCodeUrl(qr);
+
+            String qr = QRCodeGenerator.generateQRCode(BicycleMapper.toDto(updatedBicycle));
+            response.setQrCodeUrl(qr);
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -208,7 +247,12 @@ public class BicycleController {
      * @return ResponseEntity with no content
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBicycle(@PathVariable Long id) {
+    @Operation(summary = "Delete a bicycle", description = "Deletes a bicycle by ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Bicycle deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Bicycle not found"),
+    })
+    public ResponseEntity<Void> deleteBicycle(@Parameter(description = "ID of the bicycle") @PathVariable Long id) {
         try {
             // Verify bicycle exists
             bicycleService.getBicycleById(id);
@@ -226,10 +270,16 @@ public class BicycleController {
      * 
      * @param id The bicycle ID
      * @return ResponseEntity containing the QR code as base64 string
-     * @throws WriterException 
+     * @throws WriterException
      */
     @GetMapping("/{id}/qrcode")
-    public ResponseEntity<String> generateQRCode(@PathVariable Long id) throws WriterException {
+    @Operation(summary = "Generate bicycle QR code", description = "Generates a base64 QR code representation for a bicycle")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "QR code generated successfully"),
+            @ApiResponse(responseCode = "404", description = "Bicycle not found"),
+    })
+    public ResponseEntity<String> generateQRCode(@Parameter(description = "ID of the bicycle") @PathVariable Long id)
+            throws WriterException {
         try {
             Bicycle bicycle = bicycleService.getBicycleById(id);
 
