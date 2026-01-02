@@ -62,8 +62,14 @@ public class BikeTransfer {
 
     @Column(name="cost")
     private Double cost;
-    @Column(name = "verification_code", length = 100)
+    @Column(name = "verification_code")
     private String verificationCode;
+
+    @Column(name = "verified_at")
+    private LocalDateTime verifiedAt;
+
+    @Column(name = "verified_by")
+    private Long verifiedBy;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
