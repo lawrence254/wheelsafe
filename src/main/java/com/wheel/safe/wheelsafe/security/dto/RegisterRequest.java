@@ -1,4 +1,8 @@
 package com.wheel.safe.wheelsafe.security.dto;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Collections;
+
 /**
  * @Author: Lawrence Karanja
  * @Date: 2023-10-01
@@ -40,5 +44,5 @@ public class RegisterRequest {
     private String phoneNumber;
     
     @Builder.Default
-    private UserRole role = UserRole.REGULAR_USER;
+    private Set<UserRole> roles = new HashSet<>(Collections.singleton(UserRole.REGULAR_USER));
 }

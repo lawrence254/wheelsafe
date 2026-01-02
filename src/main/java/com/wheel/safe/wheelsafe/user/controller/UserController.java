@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wheel.safe.wheelsafe.user.dto.UserProfileDTO;
+import com.wheel.safe.wheelsafe.user.dto.RoleUpdateDTO;
 import com.wheel.safe.wheelsafe.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,12 @@ public class UserController {
     @PutMapping("/profile")
     public ResponseEntity<UserProfileDTO> updateCurrentUserProfile(Authentication authentication, @RequestBody UserProfileDTO profile){
         return ResponseEntity.ok(userService.updateUserProfile(authentication.getName(), profile));
+    }
+
+    @PutMapping("/update-roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserProfileDTO> updateUserRoles(@RequestBody RoleUpdateDTO roleUpdates) {
+        return ResponseEntity.ok(userService.updateUserRoles(roleUpdates));
     }
 
     @GetMapping("/{id}")

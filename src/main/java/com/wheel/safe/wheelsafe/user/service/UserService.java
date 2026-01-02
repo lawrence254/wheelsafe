@@ -1,11 +1,18 @@
 package com.wheel.safe.wheelsafe.user.service;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.context.support.BeanDefinitionDsl.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.wheel.safe.wheelsafe.security.exception.InvalidCredentialsException;
+import com.wheel.safe.wheelsafe.user.dto.RoleUpdateDTO;
 import com.wheel.safe.wheelsafe.user.dto.UserProfileDTO;
 import com.wheel.safe.wheelsafe.user.entity.User;
+import com.wheel.safe.wheelsafe.user.entity.UserRole;
 import com.wheel.safe.wheelsafe.user.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -28,6 +35,21 @@ public class UserService {
     public UserProfileDTO getUserProfileById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new InvalidCredentialsException("User not found"));
+
+        return mapToUserProfileDTO(user);
+    }
+    @Transactional
+    public UserProfileDTO updateUserRoles(RoleUpdateDTO roleUpdateDTO) {
+
+        User user = userRepository.findById(roleUpdateDTO.getUserId())
+                .orElseThrow(() -> new InvalidCredentialsException("User not found"));
+
+        Set<UserRole> userRoles = roleUpdateDTO.getRoles().stream()
+            .map(roleName -> UserRole.valueOf(roleName))
+            .collect(Collectors.toSet());
+            
+        user.setUserRoles(userRoles);
+        userRepository.save(user);
 
         return mapToUserProfileDTO(user);
     }
@@ -78,7 +100,7 @@ public class UserService {
                 .lastName(user.getLastName())
                 .email(user.getUsername())
                 .phoneNumber(user.getPhoneNumber())
-                .role(user.getRole())
+                .roles(user.getUserRoles().stream().toList())
                 .mfaEnabled(user.isMfaEnabled())
                 .build();
     }

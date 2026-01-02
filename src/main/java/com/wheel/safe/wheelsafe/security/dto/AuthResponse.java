@@ -1,5 +1,9 @@
 package com.wheel.safe.wheelsafe.security.dto;
 
+import java.util.List;
+
+import com.wheel.safe.wheelsafe.user.entity.UserRole;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +20,5 @@ public class AuthResponse {
     private long expiresIn;
     private boolean mfaRequired;
     private String userId;
-    private String userRole;
+    private List<UserRole> userRoles;
 }

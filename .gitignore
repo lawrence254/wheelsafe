@@ -3,6 +3,15 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+**.DS_STORE
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production
+# Logs
 
 ### STS ###
 .apt_generated

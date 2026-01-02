@@ -1,5 +1,7 @@
 package com.wheel.safe.wheelsafe.user.dto;
 
+import java.util.List;
+
 import com.wheel.safe.wheelsafe.user.entity.User;
 import com.wheel.safe.wheelsafe.user.entity.UserRole;
 
@@ -30,7 +32,7 @@ public class UserProfileDTO {
     @Pattern(regexp = "^[+]?[(]?[0-9]{1,4}[)]?[-\\s./0-9]*$", message = "Phone number format is invalid")
     private String phoneNumber;
 
-    private UserRole role;
+    private List<UserRole> roles;
     private boolean mfaEnabled;
 
     public static UserProfileDTO fromEntity(User user) {

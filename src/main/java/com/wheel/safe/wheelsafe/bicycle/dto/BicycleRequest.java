@@ -25,7 +25,7 @@ public class BicycleRequest {
     private String brakeType;
     private String tireSize;
     private String accessories;
-    private Long shopId; // Assuming this is the ID of the shop where the bicycle is registered
+    private Long shopId; 
 
     // Convert BicycleRequest to Bicycle entity
     public Bicycle toEntity() {
